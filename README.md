@@ -5,11 +5,17 @@ Project of Yang Chenran
 Bank database system
 
 tables.sql - Creation of tables
+
 triggers.sql - Required triggers
+
 procedures.sql - Procedures
+
 simple_CRUD.sql - Simple create, read, update and delete operations
+
 insert_data.sql - Data to be inserted
+
 select.sql - Examples of select statements
+
 views.sql - Examples of views
 
 # E-R Diagram
