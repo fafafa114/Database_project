@@ -45,21 +45,18 @@ $$
 BEGIN 
     INSERT INTO TRANSACTION (
         bank_card_id, 
-        branch_id, 
         transfer_id, 
         amount, 
         transaction_date
     ) 
     VALUES (
         NEW.sender_card_id, 
-        (SELECT branch_id FROM bank_card WHERE id = NEW.sender_card_id), 
         NEW.id, 
         NEW.amount, 
         NEW.transfer_date
     ), 
     (
         NEW.receiver_card_id, 
-        (SELECT branch_id FROM bank_card WHERE id = NEW.receiver_card_id), 
         NEW.id, 
         - NEW.amount, 
         NEW.transfer_date

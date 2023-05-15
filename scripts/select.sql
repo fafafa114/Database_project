@@ -1,4 +1,4 @@
--- high risk customer, whose total deposit is less than total loan
+-- This query finds the customers whose total deposit is less than total loan, indicating high risk.
 SELECT 
     c.id,
     c.name,
@@ -13,7 +13,7 @@ GROUP BY
 HAVING 
     SUM(bc.balance) < SUM(DISTINCT l.amount);
 
--- sum of deposit and loan by branch
+-- This query finds the total deposit amount for each branch.
 SELECT 
     branch.name,
     SUM(bank_card.balance) AS total_deposit
@@ -21,8 +21,10 @@ FROM
     branch
     JOIN bank_card ON branch.id = bank_card.branch_id
 GROUP BY 
-    branch.id;
+    branch.id
+ORDER BY total_deposit;
 
+-- This query finds the total loan amount for each branch.
 SELECT 
     branch.name,
     SUM(loan.amount) AS total_loan
@@ -32,6 +34,7 @@ FROM
 GROUP BY 
     branch.id;
 
+-- This query finds the average balance and loan amount for each branch.
 WITH deposit_summary AS (
     SELECT 
         bank_card.branch_id,
@@ -69,14 +72,44 @@ FROM
 GROUP BY 
     branch.id;
 
+
+-- This query finds the transaction details for each bank card, including the transaction ID, card number, branch name, transaction amount, transaction date, and transaction number.
 SELECT 
     t.id AS transaction_id,
     bc.card_number,
-    b.name AS branch_name,
     t.amount,
     t.transaction_date,
     ROW_NUMBER() OVER (PARTITION BY bc.card_number ORDER BY t.transaction_date) AS transaction_number
 FROM 
     transaction t
     JOIN bank_card bc ON t.bank_card_id = bc.id
-    JOIN branch b ON t.branch_id = b.id;
+ORDER BY 
+    bc.card_number, 
+    transaction_date;
+
+-- This query finds the total number of transactions for each bank card.
+SELECT 
+    bc.card_number, 
+    COUNT(1) AS transaction_count
+FROM 
+    transaction t
+    JOIN bank_card bc ON t.bank_card_id = bc.id
+GROUP BY 
+    bc.card_number;
+
+-- This query finds the rank of each bank card based on its total balance.
+SELECT 
+    card_number,
+    bc.balance as balance,
+    RANK() OVER (ORDER BY bc.balance DESC) AS balance_rank
+FROM bank_card bc;
+
+-- This query finds the bank cards with the top three highest balances.
+SELECT 
+    card_number, 
+    balance
+FROM 
+    bank_card 
+ORDER BY 
+    balance DESC 
+LIMIT 3;

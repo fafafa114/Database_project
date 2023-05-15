@@ -25,7 +25,11 @@ CREATE TABLE bank_card (
     balance DECIMAL(12, 2) NOT NULL DEFAULT 0.0,
     customer_id INTEGER REFERENCES customer(id),
     deposit_type_id INTEGER REFERENCES deposit_type(id),
-    branch_id INTEGER REFERENCES branch(id)
+    branch_id INTEGER REFERENCES branch(id),
+    effective_start_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- for versioning
+    effective_end_date TIMESTAMP NOT NULL DEFAULT '9999-12-31 23:59:59',
+    version INTEGER NOT NULL DEFAULT 1
+    -- when a card is updated, the old card is marked as expired and a new card is created
 );
 
 CREATE TABLE transfer (
@@ -39,7 +43,6 @@ CREATE TABLE transfer (
 CREATE TABLE transaction (
     id SERIAL PRIMARY KEY,
     bank_card_id INTEGER REFERENCES bank_card(id),
-    branch_id INTEGER REFERENCES branch(id),
     transfer_id INTEGER REFERENCES transfer(id),
     amount DECIMAL(12, 2) NOT NULL,
     transaction_date TIMESTAMP NOT NULL

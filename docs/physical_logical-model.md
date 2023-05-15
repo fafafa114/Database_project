@@ -20,7 +20,7 @@ views.sql - Examples of views
 
 # E-R Diagram
 
-![photo_2023-04-02_12-46-33](docs/conceptual-model.jpg)
+![photo_2023-04-02_12-46-33](conceptual-model.jpg)
 
 # Tables
 
@@ -110,17 +110,3 @@ views.sql - Examples of views
 | loan_end_date   | End date of the loan, default value is set to '9999-12-31 23:59:59' | TIMESTAMP NOT NULL DEFAULT '9999-12-31 23:59:59' |
 
 The database schema satisfies the 3NF because in each table, all non-key attributes are directly dependent on the primary key, and there is no transitive dependency between non-key attributes.
-
-
-
-## Test
-
-Before testing please create tables (```tables.sql```), create triggers (```triggers.sql```), insert data (```insert_data.sql```) in order. Please run the corresponding scripts to create them before testing views and functions.
-If you want to test, do not use ```simple_CRUD.sql``` .
-
-```
-pytest tests/test_select.py
-pytest tests/test_store_function.py
-pytest tests/test_views.py
-```
-
